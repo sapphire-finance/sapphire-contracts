@@ -799,16 +799,16 @@ library SafeBEP20 {
     }
 }
 
-// File: contracts/PrivPoolInitializable.sol
+// File: contracts/SapPoolInitializable.sol
 
 pragma solidity 0.6.12;
 
-contract PrivPoolInitializable is Ownable, ReentrancyGuard {
+contract SapPoolInitializable is Ownable, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeBEP20 for IBEP20;
 
     // The address of the smart chef factory
-    address public PRIV_POOL_FACTORY;
+    address public SAP_POOL_FACTORY;
 
     // Whether a limit is set for users
     bool public hasUserLimit;
@@ -876,7 +876,7 @@ contract PrivPoolInitializable is Ownable, ReentrancyGuard {
     event Withdraw(address indexed user, uint256 amount);
 
     constructor() public {
-        PRIV_POOL_FACTORY = msg.sender;
+        SAP_POOL_FACTORY = msg.sender;
     }
 
     /**
@@ -903,7 +903,7 @@ contract PrivPoolInitializable is Ownable, ReentrancyGuard {
         address _admin
     ) external {
         require(!isInitialized, "Already initialized");
-        require(msg.sender == PRIV_POOL_FACTORY, "Not factory");
+        require(msg.sender == SAP_POOL_FACTORY, "Not factory");
         require(_feeAddress != address(0), "Invalid zero address");
 
         _stakedToken.balanceOf(address(this));
@@ -1260,3 +1260,4 @@ contract PrivPoolInitializable is Ownable, ReentrancyGuard {
         }
     }
 }
+

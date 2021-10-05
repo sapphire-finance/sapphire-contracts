@@ -904,16 +904,16 @@ library SafeBEP20 {
     }
 }
 
-// File: contracts/PrivPoolInitializable.sol
+// File: contracts/SapPoolInitializable.sol
 
 pragma solidity 0.6.12;
 
-contract PrivPoolInitializable is Ownable, ReentrancyGuard {
+contract SapPoolInitializable is Ownable, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeBEP20 for IBEP20;
 
     // The address of the smart chef factory
-    address public PRIV_POOL_FACTORY;
+    address public SAP_POOL_FACTORY;
 
     // Whether a limit is set for users
     bool public hasUserLimit;
@@ -981,7 +981,7 @@ contract PrivPoolInitializable is Ownable, ReentrancyGuard {
     event Withdraw(address indexed user, uint256 amount);
 
     constructor() public {
-        PRIV_POOL_FACTORY = msg.sender;
+        SAP_POOL_FACTORY = msg.sender;
     }
 
     /**
@@ -1008,7 +1008,7 @@ contract PrivPoolInitializable is Ownable, ReentrancyGuard {
         address _admin
     ) external {
         require(!isInitialized, "Already initialized");
-        require(msg.sender == PRIV_POOL_FACTORY, "Not factory");
+        require(msg.sender == SAP_POOL_FACTORY, "Not factory");
         require(_feeAddress != address(0), "Invalid zero address");
 
         _stakedToken.balanceOf(address(this));
@@ -1367,12 +1367,12 @@ contract PrivPoolInitializable is Ownable, ReentrancyGuard {
 }
 
 
-// File: contracts/PriivPoolFactory.sol
+// File: contracts/SapPoolFactory.sol
 
 pragma solidity 0.6.12;
 
-contract PrivPoolFactory is Ownable {
-    event NewPrivPoolContract(address indexed smartChef);
+contract SapPoolFactory is Ownable {
+    event NewSapPoolContract(address indexed smartChef);
 
     uint16 public constant MAX_DEPOSIT_FEE = 2000;
     
@@ -1407,7 +1407,7 @@ contract PrivPoolFactory is Ownable {
         
         require(_depositFee <= MAX_DEPOSIT_FEE, "Invalid deposit fee value");
 
-        bytes memory bytecode = type(PrivPoolInitializable).creationCode;
+        bytes memory bytecode = type(SapPoolInitializable).creationCode;
         bytes32 salt =
             keccak256(
                 abi.encodePacked(_stakedToken, _rewardToken, _startBlock)
@@ -1423,7 +1423,7 @@ contract PrivPoolFactory is Ownable {
             )
         }
 
-        PrivPoolInitializable(smartChefAddress).initialize(
+        SapPoolInitializable(smartChefAddress).initialize(
             _stakedToken,
             _rewardToken,
             _rewardPerBlock,
@@ -1435,6 +1435,6 @@ contract PrivPoolFactory is Ownable {
             _admin
         );
 
-        emit NewPrivPoolContract(smartChefAddress);
+        emit NewSapPoolContract(smartChefAddress);
     }
 }
